@@ -1,19 +1,10 @@
 "use client";
 import ApButton from "@/components/Button";
 import { useAppState } from "@/context/context";
-import {
-  Table,
-  TableCaption,
-  TableContainer,
-  Tbody,
-  Td,
-  Tfoot,
-  Th,
-  Thead,
-  Tr,
-} from "@chakra-ui/react";
+import { Button, Table, Tbody, Td, Th, Thead, Tr } from "@chakra-ui/react";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
+import { FaChevronDown, FaChevronUp } from "react-icons/fa";
 
 export default function Calculation() {
   const { formData } = useAppState();
@@ -188,10 +179,14 @@ export default function Calculation() {
 
   return (
     <div className="px-10 py-14 flex flex-col items-center justify-center">
-      <div className="flex justify-between w-full">
+      <div
+        className={`flex justify-between w-full pt-10 ${
+          showTable.show ? "pb-0" : "pb-80"
+        }`}
+      >
         <div></div>
         <p className="font-bold text-3xl">Revenues</p>
-        <ApButton
+        {/* <ApButton
           title={`${
             showTable.show && showTable.type === "revenue" ? "Close" : "Open"
           } Revenue Table`}
@@ -199,7 +194,22 @@ export default function Calculation() {
             console.log("clicked");
             handleShowTable("revenue", showTable.show);
           }}
-        />
+        /> */}
+        <Button
+          onClick={() => {
+            handleShowTable(
+              "revenue",
+              showTable.show && showTable.type === "revenue"
+            );
+          }}
+          colorScheme="teal"
+        >
+          {showTable.show && showTable.type === "revenue" ? (
+            <FaChevronUp />
+          ) : (
+            <FaChevronDown />
+          )}
+        </Button>
       </div>
       {showTable.show && showTable.type === "revenue" && (
         <Table className="">
@@ -243,17 +253,32 @@ export default function Calculation() {
         </Table>
       )}
 
-      <div className="flex justify-between w-full">
+      <div className="flex justify-between w-full pt-10 ">
         <div></div>
         <p className="font-bold text-3xl">Expenses</p>
-        <ApButton
+        {/* <ApButton
           title={`${
             showTable.show && showTable.type === "expense" ? "Close" : "Open"
           } Expenses Table`}
           onClick={() => {
             handleShowTable("expense", showTable.show);
+          }}   /> */}
+
+        <Button
+          onClick={() => {
+            handleShowTable(
+              "expense",
+              showTable.show && showTable.type === "expense"
+            );
           }}
-        />
+          colorScheme="teal"
+        >
+          {showTable.show && showTable.type === "expense" ? (
+            <FaChevronUp />
+          ) : (
+            <FaChevronDown />
+          )}
+        </Button>
       </div>
       {showTable.show && showTable.type === "expense" && (
         <Table>
