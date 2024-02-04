@@ -11,10 +11,8 @@ export default function Calculation() {
   const { formData } = useAppState();
   const router = useRouter();
 
-  const [showTable, setShowTable] = useState<{
-    show: boolean;
-    type?: "expense" | "revenue";
-  }>({ show: false });
+  const [showRevenueTable, setShowRevenueTable] = useState<boolean>(false);
+  const [showExpenseTable, setShowExpenseTable] = useState<boolean>(false);
 
   useEffect(() => {
     if (formData.length < 5) router.push("/");
@@ -44,9 +42,9 @@ export default function Calculation() {
     "expenses",
     "expenseChange",
     "expenseGrowth",
-    "percentageRevenue",
-    "percentageRevenueChange",
-    "percentageRevenueGrowth",
+    "percentageExpense",
+    "percentageExpenseChange",
+    "percentageExpenseGrowth",
   ];
 
   let revenueCalculations: any = {
@@ -61,9 +59,9 @@ export default function Calculation() {
     expenses: [],
     expenseChange: [],
     expenseGrowth: [],
-    percentageRevenue: [],
-    percentageRevenueChange: [],
-    percentageRevenueGrowth: [],
+    percentageExpense: [],
+    percentageExpenseChange: [],
+    percentageExpenseGrowth: [],
   };
 
   const handleRevenueCalc = (): any => {
@@ -137,29 +135,29 @@ export default function Calculation() {
             ).toFixed(2)
           );
 
-      expenseCalculations.percentageRevenue.push(
+      expenseCalculations.percentageExpense.push(
         ((expenses[i] / revenues[i]) * 100).toFixed(2)
       );
 
       const currentPercentExpense = parseFloat(
-        expenseCalculations.percentageRevenue[i]
+        expenseCalculations.percentageExpense[i]
       );
 
       const previousPercentExpense =
-        i > 0 ? parseFloat(expenseCalculations.percentageRevenue[i - 1]) : 0;
+        i > 0 ? parseFloat(expenseCalculations.percentageExpense[i - 1]) : 0;
 
       i == 0
-        ? expenseCalculations.percentageRevenueChange.push(null)
-        : expenseCalculations.percentageRevenueChange.push(
+        ? expenseCalculations.percentageExpenseChange.push(null)
+        : expenseCalculations.percentageExpenseChange.push(
             (currentPercentExpense - previousPercentExpense).toFixed(2)
           );
 
       i == 0
-        ? expenseCalculations.percentageRevenueGrowth.push(null)
-        : expenseCalculations.percentageRevenueGrowth.push(
+        ? expenseCalculations.percentageExpenseGrowth.push(null)
+        : expenseCalculations.percentageExpenseGrowth.push(
             (
-              (expenseCalculations.percentageRevenueChange[i] /
-                expenseCalculations.percentageRevenue[i - 1]) *
+              (expenseCalculations.percentageExpenseChange[i] /
+                expenseCalculations.percentageExpense[i - 1]) *
                 100 || 0
             ).toFixed(2)
           );
@@ -168,8 +166,10 @@ export default function Calculation() {
     return null;
   };
 
-  const handleShowTable = (type: "expense" | "revenue", isOpen: boolean) => {
-    isOpen ? setShowTable({ show: false }) : setShowTable({ show: true, type });
+  const handleShowTable = (type: "expense" | "revenue") => {
+    type == "expense"
+      ? setShowExpenseTable(!showExpenseTable)
+      : setShowRevenueTable(!showRevenueTable);
   };
 
   handleRevenueCalc();
@@ -182,11 +182,11 @@ export default function Calculation() {
       <div className="px-10 py-14 flex flex-col items-center justify-center">
         <div
           className={`flex justify-center w-full pt-10 ${
-            showTable.show ? "pb-0" : "pb-80"
+            showRevenueTable ? "pb-0" : "pb-80"
           }`}
         >
-          <div className="flex bg-gray-200 ps-4 gap-5">
-            <p className="font-bold text-3xl">Revenues</p>
+          <div className="flex bg-gray-200 ps-4 gap-24 items-center">
+            <p className="font-bold text-lg">Revenues</p>
             {/* <ApButton
           title={`${
             showTable.show && showTable.type === "revenue" ? "Close" : "Open"
@@ -198,22 +198,15 @@ export default function Calculation() {
         /> */}
             <Button
               onClick={() => {
-                handleShowTable(
-                  "revenue",
-                  showTable.show && showTable.type === "revenue"
-                );
+                handleShowTable("revenue");
               }}
               colorScheme="teal"
             >
-              {showTable.show && showTable.type === "revenue" ? (
-                <FaChevronUp />
-              ) : (
-                <FaChevronDown />
-              )}
+              {showRevenueTable ? <FaChevronUp /> : <FaChevronDown />}
             </Button>
           </div>
         </div>
-        {showTable.show && showTable.type === "revenue" && (
+        {showRevenueTable && (
           <Table className="">
             {/* <TableCaption placement="top" className="text-7xl font-semibold">
             Revenues
@@ -256,28 +249,20 @@ export default function Calculation() {
         )}
 
         <div className="flex justify-center w-full pt-10  ">
-          <div className="flex bg-gray-200 ps-4 gap-5">
-            {" "}
-            <p className="font-bold text-3xl">Expenses</p>
+          <div className="flex bg-gray-200 ps-4 gap-24 items-center">
+            <p className="font-bold text-lg">Expenses</p>
             <Button
               onClick={() => {
-                handleShowTable(
-                  "expense",
-                  showTable.show && showTable.type === "expense"
-                );
+                handleShowTable("expense");
               }}
               colorScheme="teal"
             >
-              {showTable.show && showTable.type === "expense" ? (
-                <FaChevronUp />
-              ) : (
-                <FaChevronDown />
-              )}
+              {showExpenseTable ? <FaChevronUp /> : <FaChevronDown />}
             </Button>
           </div>
         </div>
 
-        {showTable.show && showTable.type === "expense" && (
+        {showExpenseTable && (
           <Table>
             <Thead>
               <Tr>
