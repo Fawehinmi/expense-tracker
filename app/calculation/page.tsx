@@ -206,47 +206,49 @@ export default function Calculation() {
             </Button>
           </div>
         </div>
-        {showRevenueTable && (
-          <Table className="">
-            {/* <TableCaption placement="top" className="text-7xl font-semibold">
+        <Table className="">
+          {/* <TableCaption placement="top" className="text-7xl font-semibold">
             Revenues
           </TableCaption> */}
 
-            <Thead>
-              <Tr>
-                <Th></Th>
-                <Th>Year 1</Th>
-                <Th>Year 2</Th>
-                <Th>Year 3</Th>
-                <Th>Year 4</Th>
-                <Th>Year 5</Th>
-              </Tr>
-            </Thead>
-            <Tbody>
-              {revenueColumnTitles.map((t: any, n: number) => (
-                <Tr key={t}>
-                  <Td>
-                    {revenueColumnTitles[n]
-                      .replace(/([a-z])([A-Z])/g, "$1 $2")
-                      .replace(/\b\w/g, (firstChar) => firstChar.toUpperCase())}
-                  </Td>
+          <Thead>
+            <Tr>
+              <Th></Th>
+              <Th>Year 1</Th>
+              <Th>Year 2</Th>
+              <Th>Year 3</Th>
+              <Th>Year 4</Th>
+              <Th>Year 5</Th>
+            </Tr>
+          </Thead>
+          <Tbody>
+            {revenueColumnTitles.map((t: any, n: number) => (
+              <Tr key={t}>
+                <Td>
+                  {revenueColumnTitles[n]
+                    .replace(/([a-z])([A-Z])/g, "$1 $2")
+                    .replace(/\b\w/g, (firstChar) => firstChar.toUpperCase())}
+                </Td>
 
-                  {revenues.map((r: any, i: number) => (
-                    <>
-                      {t.includes("percentage") ||
-                      (t.includes("Growth") &&
-                        revenueCalculations[t][i] != null) ? (
-                        <Td key={i}>{revenueCalculations[t][i]} %</Td>
-                      ) : (
-                        <Td key={i}>{revenueCalculations[t][i]}</Td>
-                      )}
-                    </>
-                  ))}
-                </Tr>
-              ))}
-            </Tbody>
-          </Table>
-        )}
+                {showRevenueTable && (
+                  <>
+                    {revenues.map((r: any, i: number) => (
+                      <>
+                        {t.includes("percentage") ||
+                        (t.includes("Growth") &&
+                          revenueCalculations[t][i] != null) ? (
+                          <Td key={i}>{revenueCalculations[t][i]} %</Td>
+                        ) : (
+                          <Td key={i}>{revenueCalculations[t][i]}</Td>
+                        )}
+                      </>
+                    ))}
+                  </>
+                )}
+              </Tr>
+            ))}
+          </Tbody>
+        </Table>
 
         <div className="flex justify-center w-full pt-10  ">
           <div className="flex bg-gray-200 ps-4 gap-24 items-center">
@@ -262,43 +264,45 @@ export default function Calculation() {
           </div>
         </div>
 
-        {showExpenseTable && (
-          <Table>
-            <Thead>
-              <Tr>
-                <Th></Th>
-                <Th>Year 1</Th>
-                <Th>Year 2</Th>
-                <Th>Year 3</Th>
-                <Th>Year 4</Th>
-                <Th>Year 5</Th>
-              </Tr>
-            </Thead>
-            <Tbody>
-              {expenseColumnTitles.map((t: any, n: number) => (
-                <Tr key={t}>
-                  <Td>
-                    {expenseColumnTitles[n]
-                      .replace(/([a-z])([A-Z])/g, "$1 $2")
-                      .replace(/\b\w/g, (firstChar) => firstChar.toUpperCase())}
-                  </Td>
+        <Table>
+          <Thead>
+            <Tr>
+              <Th></Th>
+              <Th>Year 1</Th>
+              <Th>Year 2</Th>
+              <Th>Year 3</Th>
+              <Th>Year 4</Th>
+              <Th>Year 5</Th>
+            </Tr>
+          </Thead>
+          <Tbody>
+            {expenseColumnTitles.map((t: any, n: number) => (
+              <Tr key={t}>
+                <Td>
+                  {expenseColumnTitles[n]
+                    .replace(/([a-z])([A-Z])/g, "$1 $2")
+                    .replace(/\b\w/g, (firstChar) => firstChar.toUpperCase())}
+                </Td>
 
-                  {expenses.map((r: any, i: number) => (
-                    <>
-                      {t.includes("percentage") ||
-                      (t.includes("Growth") &&
-                        expenseCalculations[t][i] != null) ? (
-                        <Td key={i}>{expenseCalculations[t][i]} %</Td>
-                      ) : (
-                        <Td key={i}>{expenseCalculations[t][i]}</Td>
-                      )}
-                    </>
-                  ))}
-                </Tr>
-              ))}
-            </Tbody>
-          </Table>
-        )}
+                {showExpenseTable && (
+                  <>
+                    {expenses.map((r: any, i: number) => (
+                      <>
+                        {t.includes("percentage") ||
+                        (t.includes("Growth") &&
+                          expenseCalculations[t][i] != null) ? (
+                          <Td key={i}>{expenseCalculations[t][i]} %</Td>
+                        ) : (
+                          <Td key={i}>{expenseCalculations[t][i]}</Td>
+                        )}
+                      </>
+                    ))}
+                  </>
+                )}
+              </Tr>
+            ))}
+          </Tbody>
+        </Table>
       </div>
     </div>
   );
