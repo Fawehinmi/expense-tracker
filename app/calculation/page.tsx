@@ -1,5 +1,6 @@
 "use client";
 import ApButton from "@/components/Button";
+import HeroSection from "@/components/Hero";
 import { useAppState } from "@/context/context";
 import { Button, Table, Tbody, Td, Th, Thead, Tr } from "@chakra-ui/react";
 import { useRouter } from "next/navigation";
@@ -31,7 +32,6 @@ export default function Calculation() {
     }
   });
 
-  console.log(expenses, revenues);
   const revenueColumnTitles = [
     "revenues",
     "revenueChange",
@@ -170,23 +170,24 @@ export default function Calculation() {
 
   const handleShowTable = (type: "expense" | "revenue", isOpen: boolean) => {
     isOpen ? setShowTable({ show: false }) : setShowTable({ show: true, type });
-
-    console.log(showTable);
   };
 
   handleRevenueCalc();
   handleExpenseCalc();
 
   return (
-    <div className="px-10 py-14 flex flex-col items-center justify-center">
-      <div
-        className={`flex justify-between w-full pt-10 ${
-          showTable.show ? "pb-0" : "pb-80"
-        }`}
-      >
-        <div></div>
-        <p className="font-bold text-3xl">Revenues</p>
-        {/* <ApButton
+    <div>
+      <HeroSection page="calulation" />
+
+      <div className="px-10 py-14 flex flex-col items-center justify-center">
+        <div
+          className={`flex justify-center w-full pt-10 ${
+            showTable.show ? "pb-0" : "pb-80"
+          }`}
+        >
+          <div className="flex bg-gray-200 ps-4 gap-5">
+            <p className="font-bold text-3xl">Revenues</p>
+            {/* <ApButton
           title={`${
             showTable.show && showTable.type === "revenue" ? "Close" : "Open"
           } Revenue Table`}
@@ -195,128 +196,125 @@ export default function Calculation() {
             handleShowTable("revenue", showTable.show);
           }}
         /> */}
-        <Button
-          onClick={() => {
-            handleShowTable(
-              "revenue",
-              showTable.show && showTable.type === "revenue"
-            );
-          }}
-          colorScheme="teal"
-        >
-          {showTable.show && showTable.type === "revenue" ? (
-            <FaChevronUp />
-          ) : (
-            <FaChevronDown />
-          )}
-        </Button>
-      </div>
-      {showTable.show && showTable.type === "revenue" && (
-        <Table className="">
-          {/* <TableCaption placement="top" className="text-7xl font-semibold">
+            <Button
+              onClick={() => {
+                handleShowTable(
+                  "revenue",
+                  showTable.show && showTable.type === "revenue"
+                );
+              }}
+              colorScheme="teal"
+            >
+              {showTable.show && showTable.type === "revenue" ? (
+                <FaChevronUp />
+              ) : (
+                <FaChevronDown />
+              )}
+            </Button>
+          </div>
+        </div>
+        {showTable.show && showTable.type === "revenue" && (
+          <Table className="">
+            {/* <TableCaption placement="top" className="text-7xl font-semibold">
             Revenues
           </TableCaption> */}
 
-          <Thead>
-            <Tr>
-              <Th></Th>
-              <Th>Year 1</Th>
-              <Th>Year 2</Th>
-              <Th>Year 3</Th>
-              <Th>Year 4</Th>
-              <Th>Year 5</Th>
-            </Tr>
-          </Thead>
-          <Tbody>
-            {revenueColumnTitles.map((t: any, n: number) => (
-              <Tr key={t}>
-                <Td>
-                  {revenueColumnTitles[n]
-                    .replace(/([a-z])([A-Z])/g, "$1 $2")
-                    .replace(/\b\w/g, (firstChar) => firstChar.toUpperCase())}
-                </Td>
-
-                {revenues.map((r: any, i: number) => (
-                  <>
-                    {t.includes("percentage") ||
-                    (t.includes("Growth") &&
-                      revenueCalculations[t][i] != null) ? (
-                      <Td key={i}>{revenueCalculations[t][i]} %</Td>
-                    ) : (
-                      <Td key={i}>{revenueCalculations[t][i]}</Td>
-                    )}
-                  </>
-                ))}
+            <Thead>
+              <Tr>
+                <Th></Th>
+                <Th>Year 1</Th>
+                <Th>Year 2</Th>
+                <Th>Year 3</Th>
+                <Th>Year 4</Th>
+                <Th>Year 5</Th>
               </Tr>
-            ))}
-          </Tbody>
-        </Table>
-      )}
+            </Thead>
+            <Tbody>
+              {revenueColumnTitles.map((t: any, n: number) => (
+                <Tr key={t}>
+                  <Td>
+                    {revenueColumnTitles[n]
+                      .replace(/([a-z])([A-Z])/g, "$1 $2")
+                      .replace(/\b\w/g, (firstChar) => firstChar.toUpperCase())}
+                  </Td>
 
-      <div className="flex justify-between w-full pt-10 ">
-        <div></div>
-        <p className="font-bold text-3xl">Expenses</p>
-        {/* <ApButton
-          title={`${
-            showTable.show && showTable.type === "expense" ? "Close" : "Open"
-          } Expenses Table`}
-          onClick={() => {
-            handleShowTable("expense", showTable.show);
-          }}   /> */}
+                  {revenues.map((r: any, i: number) => (
+                    <>
+                      {t.includes("percentage") ||
+                      (t.includes("Growth") &&
+                        revenueCalculations[t][i] != null) ? (
+                        <Td key={i}>{revenueCalculations[t][i]} %</Td>
+                      ) : (
+                        <Td key={i}>{revenueCalculations[t][i]}</Td>
+                      )}
+                    </>
+                  ))}
+                </Tr>
+              ))}
+            </Tbody>
+          </Table>
+        )}
 
-        <Button
-          onClick={() => {
-            handleShowTable(
-              "expense",
-              showTable.show && showTable.type === "expense"
-            );
-          }}
-          colorScheme="teal"
-        >
-          {showTable.show && showTable.type === "expense" ? (
-            <FaChevronUp />
-          ) : (
-            <FaChevronDown />
-          )}
-        </Button>
+        <div className="flex justify-center w-full pt-10  ">
+          <div className="flex bg-gray-200 ps-4 gap-5">
+            {" "}
+            <p className="font-bold text-3xl">Expenses</p>
+            <Button
+              onClick={() => {
+                handleShowTable(
+                  "expense",
+                  showTable.show && showTable.type === "expense"
+                );
+              }}
+              colorScheme="teal"
+            >
+              {showTable.show && showTable.type === "expense" ? (
+                <FaChevronUp />
+              ) : (
+                <FaChevronDown />
+              )}
+            </Button>
+          </div>
+        </div>
+
+        {showTable.show && showTable.type === "expense" && (
+          <Table>
+            <Thead>
+              <Tr>
+                <Th></Th>
+                <Th>Year 1</Th>
+                <Th>Year 2</Th>
+                <Th>Year 3</Th>
+                <Th>Year 4</Th>
+                <Th>Year 5</Th>
+              </Tr>
+            </Thead>
+            <Tbody>
+              {expenseColumnTitles.map((t: any, n: number) => (
+                <Tr key={t}>
+                  <Td>
+                    {expenseColumnTitles[n]
+                      .replace(/([a-z])([A-Z])/g, "$1 $2")
+                      .replace(/\b\w/g, (firstChar) => firstChar.toUpperCase())}
+                  </Td>
+
+                  {expenses.map((r: any, i: number) => (
+                    <>
+                      {t.includes("percentage") ||
+                      (t.includes("Growth") &&
+                        expenseCalculations[t][i] != null) ? (
+                        <Td key={i}>{expenseCalculations[t][i]} %</Td>
+                      ) : (
+                        <Td key={i}>{expenseCalculations[t][i]}</Td>
+                      )}
+                    </>
+                  ))}
+                </Tr>
+              ))}
+            </Tbody>
+          </Table>
+        )}
       </div>
-      {showTable.show && showTable.type === "expense" && (
-        <Table>
-          <Thead>
-            <Tr>
-              <Th></Th>
-              <Th>Year 1</Th>
-              <Th>Year 2</Th>
-              <Th>Year 3</Th>
-              <Th>Year 4</Th>
-              <Th>Year 5</Th>
-            </Tr>
-          </Thead>
-          <Tbody>
-            {expenseColumnTitles.map((t: any, n: number) => (
-              <Tr key={t}>
-                <Td>
-                  {expenseColumnTitles[n]
-                    .replace(/([a-z])([A-Z])/g, "$1 $2")
-                    .replace(/\b\w/g, (firstChar) => firstChar.toUpperCase())}
-                </Td>
-
-                {expenses.map((r: any, i: number) => (
-                  <>
-                    {t.includes("percentage") ||
-                    (t.includes("Growth") &&
-                      expenseCalculations[t][i] != null) ? (
-                      <Td key={i}>{expenseCalculations[t][i]} %</Td>
-                    ) : (
-                      <Td key={i}>{expenseCalculations[t][i]}</Td>
-                    )}
-                  </>
-                ))}
-              </Tr>
-            ))}
-          </Tbody>
-        </Table>
-      )}
     </div>
   );
 }

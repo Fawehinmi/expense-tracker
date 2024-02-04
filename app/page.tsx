@@ -1,9 +1,11 @@
 "use client";
 import ApButton from "@/components/Button";
+import HeroSection from "@/components/Hero";
 import { ApTextInput } from "@/components/TextInput";
 import { useAppState } from "@/context/context";
+
 import { Form, Formik, FormikProps } from "formik";
-import Image from "next/image";
+
 import { useRouter } from "next/navigation";
 import * as Yup from "yup";
 
@@ -42,7 +44,9 @@ export default function Home() {
   const router = useRouter();
 
   return (
-    <main className="bg-gray-50 flex items-center justify-center h-screen w-screen">
+    <main className="bg-gray-50  h-screen w-screen overflow-x-hidden">
+      <HeroSection page="home" />
+
       <Formik
         initialValues={fieldNamesObject}
         validationSchema={FormSchema}
@@ -53,24 +57,22 @@ export default function Home() {
       >
         {(props: FormikProps<any>) => (
           <Form>
-            <div className="flex gap-24">
+            <div className="flex gap-24 w-screen justify-center">
               {["Revenue", "Expense"].map((category, index) => (
-                <div key={index} className="flex flex-col gap-6">
-                  <p className="Text-center font-bold text-3xl pb-2">
+                <div key={index} className="flex flex-col gap-y-6">
+                  <p className="Text-center font-bold text-3xl pb-2 pt-8">
                     {category}s
                   </p>
                   {fieldNames
                     .filter((name) =>
                       name.toLowerCase().includes(category.toLowerCase())
                     )
-                    .map((fieldName) => (
+                    .map((fieldName, i) => (
                       <ApTextInput
                         key={fieldName}
                         name={fieldName}
                         placeHolder={`e.g $100`}
-                        label={`${category.slice(0, -1)} ${fieldName.slice(
-                          -1
-                        )}`}
+                        label={`Year ${i + 1}`}
                         type="number"
                       />
                     ))}
@@ -78,7 +80,7 @@ export default function Home() {
               ))}
             </div>
 
-            <div className="flex justify-center mt-8">
+            <div className="flex justify-center mt-8 mb-5">
               <ApButton
                 title={"Calculate"}
                 type="submit"
