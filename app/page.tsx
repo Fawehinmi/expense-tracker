@@ -7,6 +7,8 @@ import { useAppState } from "@/context/context";
 import { Form, Formik, FormikProps } from "formik";
 
 import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { setTimeout } from "timers/promises";
 import * as Yup from "yup";
 
 const FormSchema = Yup.object().shape({
@@ -42,6 +44,13 @@ fieldNames.forEach((fieldName: any) => {
 export default function Home() {
   const { formData, setFormData } = useAppState();
   const router = useRouter();
+  const [loading, setLoading] = useState<boolean>(false);
+
+  const handleSubmit = (values: any) => {
+    setLoading(true);
+    setFormData(values);
+    router.push("calculation");
+  };
 
   return (
     <main className="bg-gray-50  h-screen w-screen overflow-x-hidden">
@@ -50,10 +59,7 @@ export default function Home() {
       <Formik
         initialValues={fieldNamesObject}
         validationSchema={FormSchema}
-        onSubmit={(values: any) => {
-          setFormData(values);
-          router.push("calculation");
-        }}
+        onSubmit={handleSubmit}
       >
         {(props: FormikProps<any>) => (
           <Form>
@@ -85,6 +91,7 @@ export default function Home() {
                 title={"Calculate"}
                 type="submit"
                 colorScheme="teal"
+                isLoading={loading}
                 // className="bg-rose-500 border rounded-md p-2 text-white text-sm                                                                                                                                                                                                                                                                                                                                                                                                                                                     "
               />
             </div>

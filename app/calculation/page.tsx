@@ -14,6 +14,8 @@ export default function Calculation() {
   const [showRevenueTable, setShowRevenueTable] = useState<boolean>(false);
   const [showExpenseTable, setShowExpenseTable] = useState<boolean>(false);
 
+  const [loading, setLoading] = useState<boolean>(false);
+
   useEffect(() => {
     if (formData.length < 5) router.push("/");
   }, [[formData]]);
