@@ -180,11 +180,7 @@ export default function Calculation() {
       <HeroSection page="calulation" />
 
       <div className="px-10 py-14 flex flex-col items-center justify-center">
-        <div
-          className={`flex justify-center w-full pt-10 ${
-            showRevenueTable ? "pb-0" : "pb-80"
-          }`}
-        >
+        <div className={`flex justify-center w-full pt-10`}>
           <div className="flex bg-gray-200 ps-4 gap-24 items-center">
             <p className="font-bold text-lg">Revenues</p>
             {/* <ApButton
@@ -222,34 +218,47 @@ export default function Calculation() {
             </Tr>
           </Thead>
           <Tbody>
-            {revenueColumnTitles.map((t: any, n: number) => (
-              <Tr key={t}>
-                <Td>
-                  {revenueColumnTitles[n]
-                    .replace(/([a-z])([A-Z])/g, "$1 $2")
-                    .replace(/\b\w/g, (firstChar) => firstChar.toUpperCase())}
-                </Td>
-
-                {showRevenueTable && (
-                  <>
-                    {revenues.map((r: any, i: number) => (
-                      <>
-                        {t.includes("percentage") ||
-                        (t.includes("Growth") &&
-                          revenueCalculations[t][i] != null) ? (
-                          <Td key={i}>{revenueCalculations[t][i]} %</Td>
-                        ) : (
-                          <Td key={i}>{revenueCalculations[t][i]}</Td>
-                        )}
-                      </>
-                    ))}
-                  </>
-                )}
+            {!showRevenueTable ? (
+              <Tr>
+                <Td>Revenues</Td>
+                {revenues.map((r: any) => (
+                  <Td>{r}</Td>
+                ))}
               </Tr>
-            ))}
+            ) : (
+              <>
+                {revenueColumnTitles.map((t: any, n: number) => (
+                  <Tr key={t}>
+                    <Td>
+                      {revenueColumnTitles[n]
+                        .replace(/([a-z])([A-Z])/g, "$1 $2")
+                        .replace(/\b\w/g, (firstChar) =>
+                          firstChar.toUpperCase()
+                        )}
+                    </Td>
+
+                    {/* {showRevenueTable && ( */}
+                    <>
+                      {revenues.map((r: any, i: number) => (
+                        <>
+                          {t.includes("percentage") ||
+                          (t.includes("Growth") &&
+                            revenueCalculations[t][i] != null) ? (
+                            <Td key={i}>{revenueCalculations[t][i]} %</Td>
+                          ) : (
+                            <Td key={i}>{revenueCalculations[t][i]}</Td>
+                          )}
+                        </>
+                      ))}
+                    </>
+                    {/* )} */}
+                  </Tr>
+                ))}
+              </>
+            )}
           </Tbody>
         </Table>
-
+        <div className={` ${showRevenueTable ? "pb-0" : "pb-80"}`}></div>
         <div className="flex justify-center w-full pt-10  ">
           <div className="flex bg-gray-200 ps-4 gap-24 items-center">
             <p className="font-bold text-lg">Expenses</p>
@@ -276,31 +285,44 @@ export default function Calculation() {
             </Tr>
           </Thead>
           <Tbody>
-            {expenseColumnTitles.map((t: any, n: number) => (
-              <Tr key={t}>
-                <Td>
-                  {expenseColumnTitles[n]
-                    .replace(/([a-z])([A-Z])/g, "$1 $2")
-                    .replace(/\b\w/g, (firstChar) => firstChar.toUpperCase())}
-                </Td>
-
-                {showExpenseTable && (
-                  <>
-                    {expenses.map((r: any, i: number) => (
-                      <>
-                        {t.includes("percentage") ||
-                        (t.includes("Growth") &&
-                          expenseCalculations[t][i] != null) ? (
-                          <Td key={i}>{expenseCalculations[t][i]} %</Td>
-                        ) : (
-                          <Td key={i}>{expenseCalculations[t][i]}</Td>
-                        )}
-                      </>
-                    ))}
-                  </>
-                )}
+            {!showExpenseTable ? (
+              <Tr>
+                <Td>Expenses</Td>
+                {expenses.map((e: any) => (
+                  <Td>{e}</Td>
+                ))}
               </Tr>
-            ))}
+            ) : (
+              <>
+                {expenseColumnTitles.map((t: any, n: number) => (
+                  <Tr key={t}>
+                    <Td>
+                      {expenseColumnTitles[n]
+                        .replace(/([a-z])([A-Z])/g, "$1 $2")
+                        .replace(/\b\w/g, (firstChar) =>
+                          firstChar.toUpperCase()
+                        )}
+                    </Td>
+
+                    {showExpenseTable && (
+                      <>
+                        {expenses.map((r: any, i: number) => (
+                          <>
+                            {t.includes("percentage") ||
+                            (t.includes("Growth") &&
+                              expenseCalculations[t][i] != null) ? (
+                              <Td key={i}>{expenseCalculations[t][i]} %</Td>
+                            ) : (
+                              <Td key={i}>{expenseCalculations[t][i]}</Td>
+                            )}
+                          </>
+                        ))}
+                      </>
+                    )}
+                  </Tr>
+                ))}
+              </>
+            )}
           </Tbody>
         </Table>
       </div>
