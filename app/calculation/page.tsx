@@ -14,8 +14,6 @@ export default function Calculation() {
   const [showRevenueTable, setShowRevenueTable] = useState<boolean>(false);
   const [showExpenseTable, setShowExpenseTable] = useState<boolean>(false);
 
-  const [loading, setLoading] = useState<boolean>(false);
-
   useEffect(() => {
     if (formData.length < 5) router.push("/");
   }, [[formData]]);
@@ -260,7 +258,7 @@ export default function Calculation() {
             )}
           </Tbody>
         </Table>
-        <div className={` ${showRevenueTable ? "pb-0" : "pb-80"}`}></div>
+        <div className={` ${showRevenueTable ? "pb-0" : "pb-20"}`}></div>
         <div className="flex justify-center w-full pt-10  ">
           <div className="flex bg-gray-200 ps-4 gap-24 items-center">
             <p className="font-bold text-lg">Expenses</p>
@@ -325,6 +323,28 @@ export default function Calculation() {
                 ))}
               </>
             )}
+          </Tbody>
+        </Table>
+        <div className={` ${showExpenseTable ? "pb-0" : "pb-20"}`}></div>
+        <p className="font-bold text-lg text-center">Revenues - Expenses</p>
+        <Table>
+          <Thead>
+            <Tr>
+              <Th></Th>
+              <Th>Year 1</Th>
+              <Th>Year 2</Th>
+              <Th>Year 3</Th>
+              <Th>Year 4</Th>
+              <Th>Year 5</Th>
+            </Tr>
+          </Thead>
+          <Tbody>
+            <Tr>
+              <Td>Revenues - Expenses</Td>
+              {expenses.map((e: any, i: number) => (
+                <Td>{revenues[i] - e}</Td>
+              ))}
+            </Tr>
           </Tbody>
         </Table>
       </div>
