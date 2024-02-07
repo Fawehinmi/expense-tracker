@@ -13,6 +13,7 @@ export default function Calculation() {
 
   const [showRevenueTable, setShowRevenueTable] = useState<boolean>(false);
   const [showExpenseTable, setShowExpenseTable] = useState<boolean>(false);
+  const [showDifferenceTable, setShowDifferenceTable] = useState<boolean>(false);
 
   useEffect(() => {
     if (formData.length < 5) router.push("/");
@@ -21,6 +22,7 @@ export default function Calculation() {
 
   const expenses: any = [];
   const revenues: any = [];
+  let difference : any = []
 
   Object.entries(formData).forEach(([key, value]) => {
     if (key.includes("expense")) {
@@ -29,6 +31,7 @@ export default function Calculation() {
       revenues.push(value);
     }
   });
+difference = revenues.map((r:any, i: number) => (r - expenses[i]))
 
   const revenueColumnTitles = [
     "revenues",
@@ -46,6 +49,23 @@ export default function Calculation() {
     "percentageExpenseChange",
     "percentageExpenseGrowth",
   ];
+  const differenceColumnTitles = [
+    "difference",
+    "differenceChange",
+    "differenceGrowth",
+    "percentageDifference",
+    "percentageDifferenceChange",
+    "percentageDifferenceGrowth",
+  ];
+  
+  const differenceColumnDisplayTitles = [
+    "R-E",
+    "R-E Change",
+    "R-E Growth",
+    "Percentage R-E",
+    "Percentage R-E Change",
+    "Percentage R-E Growth",
+  ];
 
   let revenueCalculations: any = {
     revenues: [],
@@ -62,6 +82,14 @@ export default function Calculation() {
     percentageExpense: [],
     percentageExpenseChange: [],
     percentageExpenseGrowth: [],
+  };
+  let differenceCalculations: any = {
+    difference: [],
+    differenceChange: [],
+    differenceGrowth: [],
+    percentageDifference: [],
+    percentageDifferenceChange: [],
+    percentageDifferenceGrowth: [],
   };
 
   const handleRevenueCalc = (): any => {
@@ -107,6 +135,57 @@ export default function Calculation() {
             (
               (revenueCalculations.percentageRevenueChange[i] /
                 revenueCalculations.percentageRevenue[i - 1]) *
+                100 || 0
+            ).toFixed(2)
+          );
+    }
+
+    return null;
+  };
+
+  const handleDifferenceCalc = (): any => {
+    differenceCalculations.difference = difference;
+    for (let i = 0; i < difference.length; i++) {
+      const currentDifference = parseFloat(difference[i]);
+      const previousDifference = i > 0 ? parseFloat(difference[i - 1]) : 0;
+      i == 0
+        ? differenceCalculations.differenceChange.push(null)
+        : differenceCalculations.differenceChange.push(
+          currentDifference - previousDifference
+          );
+
+      i == 0
+        ? differenceCalculations.differenceGrowth.push(null)
+        : differenceCalculations.differenceGrowth.push(
+            (
+              (differenceCalculations.differenceChange[i] / difference[i - 1]) * 100 ||
+              0
+            ).toFixed(2)
+          );
+
+          differenceCalculations.percentageDifference.push(
+        (difference[i] / difference[i]) * 100
+      );
+
+      const currentPercentDifference = parseFloat(
+        differenceCalculations.percentageDifference[i]
+      );
+
+      const previousPercentDifference =
+        i > 0 ? parseFloat(differenceCalculations.percentageDifference[i - 1]) : 0;
+
+      i == 0
+        ? differenceCalculations.percentageDifferenceChange.push(null)
+        : differenceCalculations.percentageDifferenceChange.push(
+          currentPercentDifference - previousPercentDifference
+          );
+
+      i == 0
+        ? differenceCalculations.percentageDifferenceGrowth.push(null)
+        : differenceCalculations.percentageDifferenceGrowth.push(
+            (
+              (differenceCalculations.percentageDifferenceChange[i] /
+                differenceCalculations.percentageDifference[i - 1]) *
                 100 || 0
             ).toFixed(2)
           );
@@ -166,7 +245,10 @@ export default function Calculation() {
     return null;
   };
 
-  const handleShowTable = (type: "expense" | "revenue") => {
+  const handleShowTable = (type: "expense" | "revenue" | "difference") => {
+    if(type == "difference"){
+      setShowDifferenceTable(!showDifferenceTable)
+    }
     type == "expense"
       ? setShowExpenseTable(!showExpenseTable)
       : setShowRevenueTable(!showRevenueTable);
@@ -174,6 +256,7 @@ export default function Calculation() {
 
   handleRevenueCalc();
   handleExpenseCalc();
+  handleDifferenceCalc()
 
   return (
     <div>
@@ -325,8 +408,20 @@ export default function Calculation() {
             )}
           </Tbody>
         </Table>
-        <div className={` ${showExpenseTable ? "pb-0" : "pb-20"}`}></div>
-        <p className="font-bold text-lg text-center">Revenues - Expenses</p>
+        <div className={` ${showRevenueTable ? "pb-0" : "pb-20"}`}></div>
+        <div className="flex justify-center w-full pt-10  ">
+          <div className="flex bg-gray-200 ps-4 gap-24 items-center">
+            <p className="font-bold text-lg">Revenues - Expenses</p>
+            <Button
+              onClick={() => {
+                handleShowTable("difference");
+              }}
+              colorScheme="teal"
+            >
+              {showExpenseTable ? <FaChevronUp /> : <FaChevronDown />}
+            </Button>
+          </div>
+        </div>
         <Table>
           <Thead>
             <Tr>
@@ -339,12 +434,35 @@ export default function Calculation() {
             </Tr>
           </Thead>
           <Tbody>
-            <Tr>
-              <Td>Revenues - Expenses</Td>
-              {expenses.map((e: any, i: number) => (
-                <Td>{revenues[i] - e}</Td>
-              ))}
-            </Tr>
+            {!showDifferenceTable ? (
+              <Tr>
+                <Td>R - E</Td>
+                {expenses.map((e: any, i:number) => (
+                  <Td>{revenues[i] - e}</Td>
+                ))}
+              </Tr>
+            ) : (
+              <>
+                {differenceColumnTitles.map((t: any, n: number) => (
+                  <Tr key={t}>
+                    <Td>
+                   {differenceColumnDisplayTitles[n]}
+                    </Td>
+
+                    {showDifferenceTable && (
+                      <>
+                        {difference.map((r: any, i: number) => (
+                          <>
+                           
+                              <Td key={i}>{differenceCalculations[t][i]}</Td>
+                          </>
+                        ))}
+                      </>
+                    )}
+                  </Tr>
+                ))}
+              </>
+            )}
           </Tbody>
         </Table>
       </div>
